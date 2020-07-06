@@ -41,7 +41,7 @@ AWS
 
 ## Architecture
 
-This Varnish instance is responsible for dinamically forwarding requests to services and cache management based on the context path in the URL. Dynamic routing means that Varnish will send requests to Kubernetes services with more that one pod. This will ensure that traffic will be distributed to all pods of particular microservice. Initial authentification is already performed in service "UPP - Publish varnish".
+This Varnish instance is responsible for dynamically forwarding requests to services and cache management based on the context path in the URL. Dynamic routing means that Varnish will send requests to Kubernetes services with more that one pod. This will ensure that traffic will be distributed to all pods of particular microservice. Initial authentification is already performed in service "UPP - Publish varnish".
 
 ## Contains Personal Data
 
