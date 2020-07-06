@@ -51,6 +51,10 @@ No
 
 No
 
+## Dependencies
+
+- k8s-pub-auth-varnish
+
 ## Failover Architecture Type
 
 ActivePassive
