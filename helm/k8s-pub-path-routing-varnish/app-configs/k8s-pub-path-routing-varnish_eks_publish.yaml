@@ -2,6 +2,3 @@
 replicaCount: 2
 service:
   name: path-routing-varnish
-
-eksCluster: true
-
