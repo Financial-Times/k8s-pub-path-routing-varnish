@@ -47,18 +47,6 @@ sub vcl_recv {
         set req.url = regsub(req.url, "smartlogic", "notify");
         set req.backend_hint = dynBackend.backend("smartlogic-notifier");
     } 
-    elif (req.url ~ "\/notification\/wordpress.*$") {
-        set req.url = regsub(req.url, "notification\/wordpress", "content");
-        set req.backend_hint = dynBackend.backend("wordpress-notifier");
-    } 
-    elif (req.url ~ "\/notification\/brightcove\/content.*$") {
-        set req.url = regsub(req.url, "notification\/brightcove\/content", "notify");
-        set req.backend_hint = dynBackend.backend("brightcove-notifier");
-    } 
-    elif (req.url ~ "\/notification\/brightcove\/metadata.*$") {
-        set req.url = regsub(req.url, "notification\/brightcove\/metadata", "notify");
-        set req.backend_hint = dynBackend.backend("brightcove-metadata-preprocessor");
-    } 
     elif (req.url ~ "^\/__[\w-]*\/.*$") {
         # create a new backend dynamically to match the requested URL that will be looked up in the Kubernetes DNS.
         # For example calling the URL /__content-ingester/xyz will forward the request to the service content-ingester with the url /xyz
