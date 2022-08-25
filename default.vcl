@@ -46,7 +46,11 @@ sub vcl_recv {
     elif (req.url ~ "^\/smartlogic.*$") {
         set req.url = regsub(req.url, "smartlogic", "notify");
         set req.backend_hint = dynBackend.backend("smartlogic-notifier");
-    } 
+    }
+    elif (req.url ~ "^\/locations-smartlogic.*$") {
+            set req.url = regsub(req.url, "locations-smartlogic", "notify");
+            set req.backend_hint = dynBackend.backend("locations-smartlogic-notifier");
+    }
     elif (req.url ~ "^\/__[\w-]*\/.*$") {
         # create a new backend dynamically to match the requested URL that will be looked up in the Kubernetes DNS.
         # For example calling the URL /__content-ingester/xyz will forward the request to the service content-ingester with the url /xyz
