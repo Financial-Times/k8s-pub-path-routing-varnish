@@ -1,31 +1,33 @@
-# Starting from Ubuntu and not from alpine, as libvmod-dynamic used for generating dynamic backends
-# compiles currently only on debian based images.
-FROM ubuntu:bionic
+FROM ubuntu:jammy
 
-ENV VARNISHSRC=/usr/include/varnish VMODDIR=/usr/lib/varnish/vmods
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y curl apt-transport-https gnupg && \
+    curl -L https://packagecloud.io/varnishcache/varnish60lts/gpgkey | apt-key add - && \
+    echo "deb https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ jammy main" | tee /etc/apt/sources.list.d/varnish-cache.list && \
+    apt-get update && \
+    apt-get install -y libgetdns-dev varnish=6.0.11-1~jammy varnish-dev=6.0.11-1~jammy
 
-RUN apt-get update -q && \
-  apt-get install -qq git curl apt-transport-https autotools-dev automake autoconf libtool python make python-docutils sudo gnupg2 && \
-  curl -L https://packagecloud.io/varnishcache/varnish62/gpgkey | sudo apt-key add - && \
-  echo "deb https://packagecloud.io/varnishcache/varnish62/ubuntu/ bionic main" | tee /etc/apt/sources.list.d/varnish-cache.list && \
-  apt-get -q update && \
-  apt-get install -qq libgetdns-dev && \
-  apt-get install -qq varnish varnish-dev && \
-    cd / && echo "-------mod-dynamic build -------" && \
-    git clone -b 6.2 https://github.com/nigoroll/libvmod-dynamic.git && \
-    cd libvmod-dynamic && \
+# Clone and compile libvmod-dynamic
+RUN apt-get -y install git autotools-dev automake autoconf libtool make docutils-common
+WORKDIR /tmp/libvmod-dynamic
+RUN git clone -b 6.0 https://github.com/nigoroll/libvmod-dynamic.git . && \
     ./autogen.sh && \
     ./configure && \
     make && \
-    make install && \
-    apt-get remove -qq git curl apt-transport-https autotools-dev automake autoconf libtool python make python-docutils gnupg2 --allow-remove-essential && \
-    apt-get -qq autoremove && \
-    apt-get -qq clean && \
-    rm -rf /libvmod-dynamic
+    make install
 
+# Remove build dependencies and clean up
+RUN apt-get remove -y curl apt-transport-https gnupg git autotools-dev automake autoconf libtool make docutils-common varnish-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+
+WORKDIR /
 COPY default.vcl /etc/varnish/default.vcl
 COPY start.sh /start.sh
-
 RUN chmod +x /start.sh
+
+# Expose port and start
 EXPOSE 80
 CMD ["/start.sh"]
