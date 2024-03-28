@@ -54,6 +54,12 @@ sub vcl_recv {
     elif (req.url ~ "^\/concept/.*$") {
             set req.backend_hint = dynBackend.backend("cm-generic-concept-transformer");
     }
+    elif (req.url ~ "^\/draft-annotations\/content\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\/annotations\/publish.*$") {
+            set req.backend_hint = dynBackend.backend("annotations-publisher");
+    }
+    elif (req.url ~ "^\/draft-annotations\/content.*$") {
+            set req.backend_hint = dynBackend.backend("draft-annotations-api");
+    }
     elif (req.url ~ "^\/__[\w-]*\/.*$") {
         # create a new backend dynamically to match the requested URL that will be looked up in the Kubernetes DNS.
         # For example calling the URL /__content-ingester/xyz will forward the request to the service content-ingester with the url /xyz
