@@ -55,7 +55,7 @@ sub vcl_recv {
             set req.backend_hint = dynBackend.backend("cm-generic-concept-transformer");
     }
     elif (req.url ~ "^\/draft-annotations\/content\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\/annotations\/publish.*$") {
-            set req.backend_hint = dynBackend.backend("annotations-publisher");
+            set req.backend_hint = dynBackend.backend("draft-annotations-api");
     }
     elif (req.url ~ "^\/draft-annotations\/content.*$") {
             set req.backend_hint = dynBackend.backend("draft-annotations-api");
