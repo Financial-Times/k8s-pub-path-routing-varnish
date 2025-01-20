@@ -51,6 +51,10 @@ sub vcl_recv {
             set req.url = regsub(req.url, "locations-smartlogic", "notify");
             set req.backend_hint = dynBackend.backend("locations-smartlogic-notifier");
     }
+    elif (req.url ~ "^\/specialist-smartlogic.*$") {
+            set req.url = regsub(req.url, "specialist-smartlogic", "notify");
+            set req.backend_hint = dynBackend.backend("specialist-smartlogic-notifier");
+    }
     elif (req.url ~ "^\/concept/.*$") {
             set req.backend_hint = dynBackend.backend("cm-generic-concept-transformer");
     }
