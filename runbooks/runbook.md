@@ -2,6 +2,7 @@
     Written in the format prescribed by https://github.com/Financial-Times/runbook.md.
     Any future edits should abide by this format.
 -->
+
 # UPP - Publish varnish
 
 The Publishing Varnish routing proxy placed after the publishing auth varnish. Its role is to route traffic based on the context path in the URL to appropriate services.
@@ -12,7 +13,7 @@ k8s-pub-path-routing-varnish
 
 ## Primary URL
 
-https://upp-prod-publish-glb.upp.ft.com/
+<https://github.com/Financial-Times/k8s-pub-path-routing-varnish>
 
 ## Service Tier
 
@@ -29,6 +30,8 @@ AWS
 ## Architecture
 
 This Varnish instance is responsible for dynamically forwarding requests to services and cache management based on the context path in the URL. Dynamic routing means that Varnish will send requests to Kubernetes services with more that one pod. This will ensure that traffic will be distributed to all pods of particular microservice. Initial authentification is already performed in service "UPP - Publish varnish".
+
+[Content Publishing Diagram](https://lucid.app/lucidchart/5f4f1a8b-2d62-4fb3-a605-b54d52ba7ddb/edit?view_items=9ZTf.gLaq_1e&invitationId=inv_2d591f1a-d6df-4d98-8c33-3b74c4feaa37)
 
 ## Contains Personal Data
 
@@ -106,8 +109,8 @@ There are no keys for rotation.
 
 ## Monitoring
 
-*   <https://upp-prod-publish-us.upp.ft.com/__health>
-*   <https://upp-prod-publish-eu.upp.ft.com/__health>
+- <https://upp-prod-publish-us.upp.ft.com/__health>
+- <https://upp-prod-publish-eu.upp.ft.com/__health>
 
 ## First Line Troubleshooting
 
